@@ -1,71 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
+  <title>Mohammad Rafi – Hindi Film Songs Archive</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mohammad Rafi – Song Library (Legal Links)</title>
   <style>
     body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
-    h1 { margin: 0 0 6px; }
-    .muted { color: #666; margin: 0 0 18px; }
-    input { width: 100%; padding: 12px; font-size: 16px; margin: 12px 0 18px; }
+    h1 { margin-bottom: 4px; }
+    .muted { color: #666; margin-bottom: 16px; }
+    select, input {
+      padding: 10px;
+      margin: 6px 6px 16px 0;
+      font-size: 14px;
+    }
     table { width: 100%; border-collapse: collapse; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; vertical-align: top; }
-    th { position: sticky; top: 0; background: #fff; }
-    .btn { display: inline-block; padding: 6px 10px; border: 1px solid #ddd; border-radius: 10px; text-decoration: none; margin-right: 6px; }
-    .btn:hover { background: #f6f6f6; }
+    th, td {
+      border-bottom: 1px solid #eee;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; position: sticky; top: 0; }
     .small { font-size: 12px; color: #666; }
-    .rowhide { display: none; }
   </style>
 </head>
 <body>
-  <h1>Mohammad Rafi – Song Library</h1>
-  <p class="muted">All links should point to official/authorized sources (YouTube/Spotify/JioSaavn/Gaana/etc.).</p>
 
-  <input id="q" placeholder="Search song / film / year..." />
+<h1>Mohammad Rafi – Hindi Film Songs</h1>
+<p class="muted">
+  A decade-wise archive of Hindi film songs sung by Mohammad Rafi.
+</p>
 
-  <!-- Optional: embed one official playlist (replace src with your playlist embed) -->
-  <div style="margin: 14px 0 22px;">
-    <div class="small">Optional playlist embed:</div>
-    <!-- Example YouTube playlist embed -->
-    <!-- <iframe width="100%" height="380" src="https://www.youtube.com/embed/videoseries?list=YOUR_PLAYLIST_ID" frameborder="0" allowfullscreen></iframe> -->
-  </div>
+<select id="decade">
+  <option value="songs_1950s.csv">1950–1959</option>
+  <option value="songs_1960s.csv">1960–1969</option>
+  <option value="songs_1970s.csv">1970–1979</option>
+  <option value="songs_1980s.csv">1980–1980</option>
+</select>
 
-  <table id="tbl">
-    <thead>
-      <tr>
-        <th style="width: 34%;">Song</th>
-        <th style="width: 26%;">Film / Album</th>
-        <th style="width: 10%;">Year</th>
-        <th>Links</th>
-      </tr>
-    </thead>
-    <tbody id="rows">
-      <!-- Add rows like this (repeat for each song) -->
-      <tr>
-        <td>Baharon Phool Barsao</td>
-        <td>Surasalila / (example)</td>
-        <td>1966</td>
-        <td>
-          <a class="btn" href="https://www.youtube.com/results?search_query=Baharon+Phool+Barsao+Mohammad+Rafi" target="_blank" rel="noopener">YouTube</a>
-          <a class="btn" href="https://open.spotify.com/search/Baharon%20Phool%20Barsao%20Mohammad%20Rafi" target="_blank" rel="noopener">Spotify</a>
-          <a class="btn" href="https://www.jiosaavn.com/search/Baharon%20Phool%20Barsao%20Mohammad%20Rafi" target="_blank" rel="noopener">JioSaavn</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<input type="text" id="search" placeholder="Search song / film / composer..." />
 
-  <script>
-    const q = document.getElementById('q');
-    const rows = [...document.querySelectorAll('#rows tr')];
+<table>
+  <thead>
+    <tr>
+      <th>Song</th>
+      <th>Film</th>
+      <th>Year</th>
+      <th>Category</th>
+      <th>Composer</th>
+      <th>Lyricist</th>
+    </tr>
+  </thead>
+  <tbody id="songs"></tbody>
+</table>
 
-    q.addEventListener('input', () => {
-      const term = q.value.trim().toLowerCase();
-      rows.forEach(r => {
-        const text = r.innerText.toLowerCase();
-        r.classList.toggle('rowhide', term && !text.includes(term));
-      });
-    });
-  </script>
+<script src="app.js"></script>
 </body>
 </html>
