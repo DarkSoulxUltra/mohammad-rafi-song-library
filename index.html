@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mohammad Rafi – Song Library (Legal Links)</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+    h1 { margin: 0 0 6px; }
+    .muted { color: #666; margin: 0 0 18px; }
+    input { width: 100%; padding: 12px; font-size: 16px; margin: 12px 0 18px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; vertical-align: top; }
+    th { position: sticky; top: 0; background: #fff; }
+    .btn { display: inline-block; padding: 6px 10px; border: 1px solid #ddd; border-radius: 10px; text-decoration: none; margin-right: 6px; }
+    .btn:hover { background: #f6f6f6; }
+    .small { font-size: 12px; color: #666; }
+    .rowhide { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Mohammad Rafi – Song Library</h1>
+  <p class="muted">All links should point to official/authorized sources (YouTube/Spotify/JioSaavn/Gaana/etc.).</p>
+
+  <input id="q" placeholder="Search song / film / year..." />
+
+  <!-- Optional: embed one official playlist (replace src with your playlist embed) -->
+  <div style="margin: 14px 0 22px;">
+    <div class="small">Optional playlist embed:</div>
+    <!-- Example YouTube playlist embed -->
+    <!-- <iframe width="100%" height="380" src="https://www.youtube.com/embed/videoseries?list=YOUR_PLAYLIST_ID" frameborder="0" allowfullscreen></iframe> -->
+  </div>
+
+  <table id="tbl">
+    <thead>
+      <tr>
+        <th style="width: 34%;">Song</th>
+        <th style="width: 26%;">Film / Album</th>
+        <th style="width: 10%;">Year</th>
+        <th>Links</th>
+      </tr>
+    </thead>
+    <tbody id="rows">
+      <!-- Add rows like this (repeat for each song) -->
+      <tr>
+        <td>Baharon Phool Barsao</td>
+        <td>Surasalila / (example)</td>
+        <td>1966</td>
+        <td>
+          <a class="btn" href="https://www.youtube.com/results?search_query=Baharon+Phool+Barsao+Mohammad+Rafi" target="_blank" rel="noopener">YouTube</a>
+          <a class="btn" href="https://open.spotify.com/search/Baharon%20Phool%20Barsao%20Mohammad%20Rafi" target="_blank" rel="noopener">Spotify</a>
+          <a class="btn" href="https://www.jiosaavn.com/search/Baharon%20Phool%20Barsao%20Mohammad%20Rafi" target="_blank" rel="noopener">JioSaavn</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const q = document.getElementById('q');
+    const rows = [...document.querySelectorAll('#rows tr')];
+
+    q.addEventListener('input', () => {
+      const term = q.value.trim().toLowerCase();
+      rows.forEach(r => {
+        const text = r.innerText.toLowerCase();
+        r.classList.toggle('rowhide', term && !text.includes(term));
+      });
+    });
+  </script>
+</body>
+</html>
