@@ -4,40 +4,114 @@ const tableBody = document.getElementById("songs");
 
 let allRows = [];
 
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/).filter(Boolean);
+  if (lines.length === 0) return [];
+
+  const headers = splitCSVLine(lines[0]);
+
+  return lines.slice(1).map((line) => {
+    const values = splitCSVLine(line);
+    const row = {};
+
+    headers.forEach((header, index) => {
+      row[header] = values[index] || "";
+    });
+
+    return row;
+  });
+}
+
+function splitCSVLine(line) {
+  const parts = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i += 1) {
+    const char = line[i];
+
+    if (char === '"') {
+      const next = line[i + 1];
+      if (inQuotes && next === '"') {
+        current += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      parts.push(current.trim());
+      current = "";
+      continue;
+    }
+
+    current += char;
+  }
+
+  parts.push(current.trim());
+  return parts;
+}
+
+function buildYouTubeSearchUrl(songTitle, film) {
+  const q = [songTitle, film, "Mohammad Rafi"].filter(Boolean).join(" ");
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
+}
+
 function loadCSV(file) {
   fetch(`data/${file}`)
-    .then(res => res.text())
-    .then(text => {
-      const lines = text.split("\n").slice(1);
-      allRows = lines.map(l => l.split(","));
+    .then((res) => res.text())
+    .then((text) => {
+      allRows = parseCSV(text);
       render(allRows);
     });
 }
 
 function render(rows) {
   tableBody.innerHTML = "";
-  rows.forEach(r => {
-    if (r.length < 6) return;
+
+  if (rows.length === 0) {
     const tr = document.createElement("tr");
+    tr.innerHTML = '<td colspan="7" class="small">No songs found for this decade yet.</td>';
+    tableBody.appendChild(tr);
+    return;
+  }
+
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    const youtubeLink = row.youtube_url || buildYouTubeSearchUrl(row.song_title, row.film);
+
     tr.innerHTML = `
-      <td>${r[0]}</td>
-      <td>${r[1]}</td>
-      <td>${r[2]}</td>
-      <td>${r[4]}</td>
-      <td>${r[6]}</td>
-      <td>${r[7]}</td>
+      <td>${row.song_title || ""}</td>
+      <td>${row.film || ""}</td>
+      <td>${row.year || ""}</td>
+      <td>${row.category || ""}</td>
+      <td>${row.composer || ""}</td>
+      <td>${row.lyricist || ""}</td>
+      <td><a href="${youtubeLink}" target="_blank" rel="noopener noreferrer">YouTube</a></td>
     `;
+
     tableBody.appendChild(tr);
   });
 }
 
 searchInput.addEventListener("input", () => {
-  const q = searchInput.value.toLowerCase();
-  render(allRows.filter(r => r.join(" ").toLowerCase().includes(q)));
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) {
+    render(allRows);
+    return;
+  }
+
+  const filtered = allRows.filter((row) =>
+    Object.values(row).join(" ").toLowerCase().includes(q)
+  );
+  render(filtered);
 });
 
 decadeSelect.addEventListener("change", () => {
   loadCSV(decadeSelect.value);
+  searchInput.value = "";
 });
 
 loadCSV(decadeSelect.value);
