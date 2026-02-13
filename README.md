@@ -5,6 +5,7 @@ A decade-wise archive of Hindi film songs sung by Mohammad Rafi.
 ## Features
 - Decade selector
 - Fast search
+- In-app mini player (embedded YouTube search playback)
 - Clean, expandable CSV-based data
 - Hosted via GitHub Pages
 

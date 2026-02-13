@@ -22,6 +22,65 @@
     }
     th { background: #fafafa; position: sticky; top: 0; }
     .small { font-size: 12px; color: #666; }
+    .player-link {
+      border: 1px solid #1a73e8;
+      color: #1a73e8;
+      background: #fff;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .player-link:hover { background: #e8f0fe; }
+    .mini-player {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      width: min(360px, calc(100vw - 32px));
+      background: #111;
+      color: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      z-index: 10;
+    }
+    .mini-player[hidden] { display: none; }
+    .mini-player-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      font-size: 13px;
+      background: #1d1d1d;
+      gap: 8px;
+    }
+    .mini-player-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mini-player-close {
+      border: none;
+      background: transparent;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .mini-player-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      display: block;
+      background: #000;
+    }
+    .mini-player-note {
+      margin: 0;
+      padding: 8px 12px 10px;
+      font-size: 11px;
+      color: #bdbdbd;
+    }
   </style>
 </head>
 <body>
@@ -54,6 +113,22 @@
   </thead>
   <tbody id="songs"></tbody>
 </table>
+
+<section id="mini-player" class="mini-player" hidden>
+  <div class="mini-player-header">
+    <span id="mini-player-title" class="mini-player-title">Now playing</span>
+    <button id="mini-player-close" class="mini-player-close" aria-label="Close mini player">×</button>
+  </div>
+  <iframe
+    id="mini-player-frame"
+    class="mini-player-frame"
+    allow="autoplay; encrypted-media; picture-in-picture"
+    allowfullscreen
+    referrerpolicy="strict-origin-when-cross-origin"
+    title="Mini player"
+  ></iframe>
+  <p class="mini-player-note">Plays inside this app using YouTube's embedded player.</p>
+</section>
 
 <script src="app.js"></script>
 </body>

@@ -1,6 +1,10 @@
 const decadeSelect = document.getElementById("decade");
 const searchInput = document.getElementById("search");
 const tableBody = document.getElementById("songs");
+const miniPlayer = document.getElementById("mini-player");
+const miniPlayerFrame = document.getElementById("mini-player-frame");
+const miniPlayerTitle = document.getElementById("mini-player-title");
+const miniPlayerClose = document.getElementById("mini-player-close");
 
 let allRows = [];
 
@@ -59,6 +63,23 @@ function buildYouTubeSearchUrl(songTitle, film) {
   return `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
 }
 
+function buildYouTubeEmbedUrl(songTitle, film) {
+  const q = [songTitle, film, "Mohammad Rafi"].filter(Boolean).join(" ");
+  return `https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(q)}&autoplay=1`;
+}
+
+function playInMiniPlayer(row) {
+  miniPlayerTitle.textContent = `${row.song_title || "Unknown Song"} — ${row.film || "Unknown Film"}`;
+  miniPlayerFrame.src = buildYouTubeEmbedUrl(row.song_title, row.film);
+  miniPlayer.hidden = false;
+}
+
+function closeMiniPlayer() {
+  miniPlayer.hidden = true;
+  miniPlayerFrame.src = "";
+  miniPlayerTitle.textContent = "Now playing";
+}
+
 function loadCSV(file) {
   fetch(`data/${file}`)
     .then((res) => res.text())
@@ -89,9 +110,14 @@ function render(rows) {
       <td>${row.category || ""}</td>
       <td>${row.composer || ""}</td>
       <td>${row.lyricist || ""}</td>
-      <td><a href="${youtubeLink}" target="_blank" rel="noopener noreferrer">YouTube</a></td>
+      <td>
+        <button type="button" class="player-link">Play in app</button>
+        <div class="small"><a href="${youtubeLink}" target="_blank" rel="noopener noreferrer">Open YouTube</a></div>
+      </td>
     `;
 
+    const button = tr.querySelector(".player-link");
+    button.addEventListener("click", () => playInMiniPlayer(row));
     tableBody.appendChild(tr);
   });
 }
@@ -113,5 +139,7 @@ decadeSelect.addEventListener("change", () => {
   loadCSV(decadeSelect.value);
   searchInput.value = "";
 });
+
+miniPlayerClose.addEventListener("click", closeMiniPlayer);
 
 loadCSV(decadeSelect.value);
